@@ -10,6 +10,21 @@ const pillars = [
 ---
 <BaseLayout title="CALIENDO PSI | Eduardo Caliendo — Psicanalista e filósofo">
   <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-media" aria-hidden="true">
+      <video
+        class="hero-video"
+        poster="/images/hero-poster.jpg"
+        width="1600"
+        height="900"
+        muted
+        loop
+        playsinline
+        preload="auto"
+      >
+        <source src="/videos/hero-marble.mp4" type="video/mp4" />
+      </video>
+      <div class="hero-overlay"></div>
+    </div>
     <div class="container hero-grid">
       <div class="hero-copy">
         <p class="eyebrow"><span class="small-line" aria-hidden="true"></span> EDUARDO CALIENDO</p>
@@ -17,24 +32,7 @@ const pillars = [
         <p class="hero-description">Psicanálise e filosofia em um espaço dedicado<br class="desktop-break" /> à sua história, às suas questões e ao seu tempo.</p>
         <a class="button button-gold" href={site.whatsapp} target="_blank" rel="noopener noreferrer">Vamos conversar <span aria-hidden="true">↗</span><span class="sr-only"> pelo WhatsApp (abre em nova aba)</span></a>
         <span class="hero-note">O primeiro passo pode ser uma conversa.</span>
-      </div>
-      <div class="hero-symbol">
-        <div class="hero-video-frame">
-          <video
-            class="hero-video"
-            poster="/images/hero-poster.jpg"
-            width="640"
-            height="640"
-            muted
-            loop
-            playsinline
-            preload="auto"
-            aria-hidden="true"
-          >
-            <source src="/videos/hero-marble.mp4" type="video/mp4" />
-          </video>
-        </div>
-        <span class="symbol-caption">ESCUTA · REFLEXÃO · AUTOCONHECIMENTO</span>
+        <span class="hero-tagline">ESCUTA · REFLEXÃO · AUTOCONHECIMENTO</span>
       </div>
     </div>
     <div class="container hero-bottom"><span>PSICANALISTA & FILÓSOFO</span><a href="#sobre">Conheça este espaço <span aria-hidden="true">↓</span></a><span>RIO DE JANEIRO · RJ</span></div>
