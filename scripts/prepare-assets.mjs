@@ -20,6 +20,7 @@ const cardSource = path.join(root, 'fd3b5963-4f21-4c26-8bdf-c0a37c183455.jpg');
 const backgroundVideos = [
   { source: path.join(root, '.img', 'Marble_sculpture_loop_animation_20260917161751.mp4'), videoName: 'hero-marble', posterName: 'hero-poster' },
   { source: path.join(root, '.img', 'Electrical_impulses_firing_along…_20260917185151.mp4'), videoName: 'reflection-neurons', posterName: 'reflection-poster' },
+  { source: path.join(root, '.img', 'Clouds_drifting_across_full_moon_20260917203125.mp4'), videoName: 'footer-moon', posterName: 'footer-poster' },
 ];
 // Ilustrações dos três pilares (Psicanálise, Filosofia, Consciência).
 const pillarImages = [

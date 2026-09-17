@@ -2,6 +2,12 @@
 import { navigation, site } from '../data/site';
 ---
 <footer class="site-footer">
+  <div class="footer-media" aria-hidden="true">
+    <video class="footer-video" poster="/images/footer-poster.jpg" width="1280" height="720" muted loop playsinline preload="none">
+      <source src="/videos/footer-moon.mp4" type="video/mp4" />
+    </video>
+    <div class="footer-overlay"></div>
+  </div>
   <div class="container footer-top">
     <div class="footer-brand">
       <a class="brand" href="/" aria-label="Eduardo Caliendo — página inicial">
@@ -31,3 +37,24 @@ import { navigation, site } from '../data/site';
     <span>Desenvolvido por <a href="https://www.tiagobrazil.com.br/" target="_blank" rel="noopener noreferrer">Tiago Brazil<span aria-hidden="true"> ↗</span><span class="sr-only"> (abre em nova aba)</span></a></span>
   </div>
 </footer>
+<script>
+  const footer = document.querySelector<HTMLElement>('.site-footer');
+  const footerVideo = footer?.querySelector<HTMLVideoElement>('.footer-video');
+  const prefersReducedMotionFooter = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (footer && footerVideo && !prefersReducedMotionFooter) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            footerVideo.play().catch(() => {});
+          } else {
+            footerVideo.pause();
+          }
+        }
+      },
+      { threshold: 0.25 },
+    );
+    observer.observe(footer);
+  }
+</script>
