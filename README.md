@@ -166,6 +166,12 @@ Os comandos do painel são a configuração inicial da integração. Todo códig
 
 Se o domínio for vinculado pelo painel, o caminho é **Settings → Domains & Routes → Add → Custom Domain**; registre a mesma rota no Wrangler antes do próximo deploy para manter a configuração sincronizada. Não ative `www` sem também definir no código seu redirecionamento permanente para o domínio canônico. O projeto não depende de um servidor de origem separado.
 
+## Headers de segurança, cache e redirecionamento `www`
+
+A Content-Security-Policy é gerada automaticamente pelo Astro a partir de `security.csp` em `astro.config.mjs`, com hashes por build para o único script inline (dados estruturados JSON-LD). `src/middleware.ts` complementa cada resposta SSR com `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy` e `Strict-Transport-Security`, e responde com 308 a qualquer requisição para `www.caliendopsi.com.br`, redirecionando para o domínio canônico e preservando path e query string. Esse redirecionamento só entra em vigor quando o domínio `www` também estiver roteado para o mesmo Worker; veja a seção de domínio acima.
+
+Cache de assets estáticos é definido em `public/_headers`: `/images/*`, `/favicon.png` e `/apple-touch-icon.png` recebem cache de uma semana com revalidação. O adaptador da Cloudflare adiciona automaticamente, no build, uma regra de cache imutável de um ano para os arquivos com hash em `/_astro/*`. Respostas SSR (`/`, `/privacidade/`) não recebem cache estático; a estratégia de cache de borda para HTML, se necessária, deve ser configurada como Cache Rule na Cloudflare após observar o tráfego real.
+
 ## Rollback pelo Git
 
 Identifique o commit que introduziu o problema, crie uma branch de correção e use `git revert SHA_DO_COMMIT`. Depois execute `npm run validate`, envie um PR e integre em `main`. O Workers Builds publica o estado corrigido. Para reverter um merge, selecione conscientemente o parent adequado; não reescreva o histórico de `main`.
