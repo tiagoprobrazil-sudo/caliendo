@@ -248,6 +248,23 @@ button {
   line-height: 1.1;
 }
 
+.site-header .brand {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.brand-mark {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
 .brand-name {
   font-family: var(--font-serif);
   font-size: 1.5rem;
@@ -414,8 +431,8 @@ button {
   position: absolute;
   inset: 0;
   background:
-    repeating-linear-gradient(0deg, rgba(217, 189, 133, 0.08) 0 1px, transparent 1px 44px),
-    repeating-linear-gradient(90deg, rgba(217, 189, 133, 0.08) 0 1px, transparent 1px 44px),
+    repeating-linear-gradient(0deg, rgba(217, 189, 133, 0.16) 0 1px, transparent 1px 44px),
+    repeating-linear-gradient(90deg, rgba(217, 189, 133, 0.16) 0 1px, transparent 1px 44px),
     linear-gradient(
       110deg,
       rgba(13, 20, 26, 0.94) 0%,
