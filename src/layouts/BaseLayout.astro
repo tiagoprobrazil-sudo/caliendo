@@ -1,0 +1,65 @@
+---
+import '@fontsource/cormorant-garamond/latin-400.css';
+import '@fontsource/cormorant-garamond/latin-400-italic.css';
+import '@fontsource/cormorant-garamond/latin-500.css';
+import '@fontsource/manrope/latin-400.css';
+import '@fontsource/manrope/latin-500.css';
+import '@fontsource/manrope/latin-600.css';
+import serifFont from '@fontsource/cormorant-garamond/files/cormorant-garamond-latin-400-normal.woff2?url';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+
+interface Props { title: string; description?: string; noindex?: boolean; }
+const { title, description = site.description, noindex = false } = Astro.props;
+const production = Astro.url.hostname === new URL(site.url).hostname;
+const canonical = new URL(Astro.url.pathname, site.url).href;
+const structuredData = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'WebSite', '@id': `${site.url}/#website`, url: `${site.url}/`, name: site.name, inLanguage: 'pt-BR' },
+    { '@type': 'Person', '@id': `${site.url}/#eduardo`, name: site.person, jobTitle: site.role, url: `${site.url}/`, sameAs: [site.instagram] },
+    { '@type': 'WebPage', '@id': canonical, url: canonical, name: title, description, inLanguage: 'pt-BR', isPartOf: { '@id': `${site.url}/#website` }, about: { '@id': `${site.url}/#eduardo` } },
+  ],
+}).replace(/</g, '\\u003c');
+const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(structuredData));
+const hash = btoa(String.fromCharCode(...new Uint8Array(digest)));
+Astro.csp?.insertScriptHash(`sha256-${hash}`);
+---
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content={noindex || !production ? 'noindex, nofollow' : 'index, follow'} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#14212a" />
+    <link rel="icon" href="/favicon.png" type="image/png" sizes="48x48" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+    <link rel="preload" href={serifFont} as="font" type="font/woff2" crossorigin />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={`${site.url}/images/social-card.jpg`} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Cartão de Eduardo Caliendo, psicanalista e filósofo, com o emblema original em dourado e marfim." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={`${site.url}/images/social-card.jpg`} />
+    <script type="application/ld+json" set:html={structuredData} />
+  </head>
+  <body>
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+    <Header />
+    <main id="conteudo"><slot /></main>
+    <Footer />
+  </body>
+</html>

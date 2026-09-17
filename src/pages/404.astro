@@ -1,0 +1,7 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+Astro.response.status = 404;
+---
+<BaseLayout title="Página não encontrada | CALIENDO PSI" noindex>
+  <section class="error-page container section-space"><p class="eyebrow">404 · PÁGINA NÃO ENCONTRADA</p><h1>Podemos encontrar<br />outro <em>caminho.</em></h1><p>A página que você procura não está disponível.<br />Volte ao início para conhecer este espaço.</p><a class="button button-dark" href="/">Voltar ao início <span aria-hidden="true">↗</span></a></section>
+</BaseLayout>

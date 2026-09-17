@@ -1,0 +1,2 @@
+# Nenhum binding ou secret de runtime é necessário nesta versão.
+# Para futuras integrações, copie para .dev.vars (ignorado pelo Git).

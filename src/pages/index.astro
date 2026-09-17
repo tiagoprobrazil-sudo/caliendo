@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Contact from '../components/Contact.astro';
+import { questions, site } from '../data/site';
+const pillars = [
+  { number: '01', name: 'Psicanálise', text: 'Um convite à palavra. Um espaço para falar sobre a sua história, suas inquietações e aquilo que pede escuta.' },
+  { number: '02', name: 'Filosofia', text: 'Um olhar para as perguntas. Refletir sobre as escolhas, os sentidos e as formas de estar no mundo.' },
+  { number: '03', name: 'Consciência', text: 'Uma abertura para olhar para si. Dar lugar à própria experiência, com atenção às singularidades do seu percurso.' },
+];
+---
+<BaseLayout title="CALIENDO PSI | Eduardo Caliendo — Psicanalista e filósofo">
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="small-line" aria-hidden="true"></span> EDUARDO CALIENDO</p>
+        <h1 id="hero-title">Um espaço de escuta.<br />Um encontro<br />com <em>você.</em></h1>
+        <p class="hero-description">Psicanálise e filosofia em um espaço dedicado<br class="desktop-break" /> à sua história, às suas questões e ao seu tempo.</p>
+        <a class="button button-gold" href={site.whatsapp} target="_blank" rel="noopener noreferrer">Vamos conversar <span aria-hidden="true">↗</span><span class="sr-only"> pelo WhatsApp (abre em nova aba)</span></a>
+        <span class="hero-note">O primeiro passo pode ser uma conversa.</span>
+      </div>
+      <div class="hero-symbol">
+        <picture>
+          <source type="image/avif" srcset="/images/emblem-dark-640.avif" />
+          <img src="/images/emblem-dark-640.webp" srcset="/images/emblem-dark-320.webp 320w, /images/emblem-dark-640.webp 640w" sizes="(max-width: 760px) 280px, 42vw" width="640" height="671" alt="Emblema original de Eduardo Caliendo: símbolo psi, asas e estrela em dourado." fetchpriority="high" decoding="async" />
+        </picture>
+        <span class="symbol-caption">ESCUTA · REFLEXÃO · AUTOCONHECIMENTO</span>
+      </div>
+    </div>
+    <div class="container hero-bottom"><span>PSICANALISTA & FILÓSOFO</span><a href="#sobre">Conheça este espaço <span aria-hidden="true">↓</span></a><span>RIO DE JANEIRO · RJ</span></div>
+  </section>
+
+  <section id="sobre" class="about section-space" aria-labelledby="about-title">
+    <div class="container about-grid">
+      <div class="about-art">
+        <div class="art-border">
+          <img src="/images/emblem-light-400.webp" alt="Emblema de Eduardo Caliendo em azul escuro e dourado sobre fundo marfim." width="400" height="423" loading="lazy" decoding="async" />
+          <span>PSICANÁLISE · FILOSOFIA · CONSCIÊNCIA</span>
+        </div>
+        <span class="art-footnote">CADA HISTÓRIA É ÚNICA.</span>
+      </div>
+      <div class="about-copy">
+        <p class="eyebrow">SOBRE ESTE ESPAÇO</p>
+        <h2 id="about-title">Antes de qualquer resposta,<br />há uma história que<br />merece ser <em>ouvida.</em></h2>
+        <p>A vida nem sempre cabe nas palavras que já conhecemos. Às vezes, é preciso um tempo, uma pausa e um espaço para poder falar.</p>
+        <p>Sou Eduardo Caliendo, psicanalista e filósofo. A CALIENDO PSI nasce desse encontro entre a escuta e a reflexão: um convite para olhar para a própria história e dar lugar às suas perguntas.</p>
+        <div class="signature"><span>Eduardo Caliendo</span><span>PSICANALISTA & FILÓSOFO</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="abordagem" class="approach section-space" aria-labelledby="approach-title">
+    <div class="container">
+      <div class="section-heading"><div><p class="eyebrow">TRÊS OLHARES, UM ENCONTRO</p><h2 id="approach-title">Escutar. Refletir.<br /><em>Conhecer-se.</em></h2></div><p>Não há uma história igual à outra.<br />Há caminhos que se constroem<br />a partir de uma escuta singular.</p></div>
+      <div class="pillars">{pillars.map((pillar) => <article class="pillar"><span class="pillar-number">{pillar.number}</span><h3>{pillar.name}</h3><p>{pillar.text}</p><span class="pillar-line" aria-hidden="true"></span></article>)}</div>
+    </div>
+  </section>
+
+  <section class="reflection" aria-label="Um convite à reflexão"><div class="container"><span class="reflection-mark" aria-hidden="true">“</span><p>Você não precisa ter todas as respostas<br />para começar a se <em>escutar.</em></p><span class="reflection-footer">UM CONVITE AO SEU PRÓPRIO TEMPO</span></div></section>
+
+  <section id="duvidas" class="faq section-space" aria-labelledby="faq-title">
+    <div class="container faq-grid">
+      <div><p class="eyebrow">ANTES DE COMEÇAR</p><h2 id="faq-title">É natural<br />ter <em>perguntas.</em></h2><p>Algumas informações para<br />acolher o seu primeiro passo.</p><a class="text-link" href="#contato">Fale diretamente comigo <span aria-hidden="true">↗</span></a></div>
+      <div class="faq-list">{questions.map((item, index) => <details class="faq-item" name="perguntas"><summary><span class="faq-number">0{index + 1}</span><span>{item.question}</span><span class="faq-toggle" aria-hidden="true">+</span></summary><p>{item.answer}</p></details>)}</div>
+    </div>
+  </section>
+  <Contact />
+</BaseLayout>

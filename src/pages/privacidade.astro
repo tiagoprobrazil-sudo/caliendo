@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../data/site';
+---
+<BaseLayout title="Privacidade | CALIENDO PSI" description="Informações sobre privacidade, navegação e canais de contato no site CALIENDO PSI.">
+  <article class="legal-page container section-space">
+    <a class="text-link" href="/">← Voltar ao início</a>
+    <p class="eyebrow">CALIENDO PSI</p>
+    <h1>Privacidade</h1>
+    <p class="legal-lead">Transparência também faz parte de uma relação de cuidado.</p>
+    <h2>Sobre este site</h2>
+    <p>Este é o site de apresentação de Eduardo Caliendo, psicanalista e filósofo. Seu objetivo é compartilhar informações e disponibilizar os canais de contato do profissional.</p>
+    <h2>Informações durante a navegação</h2>
+    <p>O site não possui cadastro, formulário, publicidade ou ferramenta de análise de audiência. A aplicação não utiliza cookies nem armazenamento local para rastrear visitantes.</p>
+    <p>A infraestrutura de hospedagem da Cloudflare pode processar informações técnicas, como endereço IP, horário e dados da requisição, para entregar as páginas, manter o funcionamento e proteger o serviço. A coleta técnica da infraestrutura é distinta do conteúdo das conversas com o profissional.</p>
+    <h2>Contato e serviços externos</h2>
+    <p>Ao acessar o WhatsApp, o Instagram ou seu aplicativo de e-mail, você passa a utilizar serviços externos, sujeitos às suas próprias políticas de privacidade. As mensagens enviadas nesses canais não são armazenadas por este site.</p>
+    <p>No primeiro contato, compartilhe apenas o necessário para solicitar informações ou combinar um atendimento. Evite incluir informações sensíveis em mensagens iniciais.</p>
+    <h2>Dúvidas sobre dados pessoais</h2>
+    <p>Para esclarecer dúvidas sobre o tratamento de informações compartilhadas diretamente com o profissional ou solicitar acesso, correção ou exclusão, entre em contato pelo e-mail <a href={`mailto:${site.email}`}>{site.email}</a>. Cada solicitação será analisada conforme seu contexto.</p>
+    <h2>Atualizações</h2>
+    <p>Esta página deve ser atualizada se novas ferramentas ou formas de coleta de dados forem adicionadas ao site.</p>
+  </article>
+</BaseLayout>
