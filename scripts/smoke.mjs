@@ -71,6 +71,17 @@ const checks = [
       );
     },
   },
+  {
+    name: 'GET /audio/eco-do-tempo.mp3 retorna 200',
+    run: async () => {
+      const res = await fetch(baseUrl + '/audio/eco-do-tempo.mp3');
+      assert(res.status === 200, `status esperado 200, recebido ${res.status}`);
+      assert(
+        (res.headers.get('content-type') ?? '').includes('audio/mpeg'),
+        'content-type inesperado para a faixa de áudio',
+      );
+    },
+  },
 ];
 
 function assert(condition, message) {

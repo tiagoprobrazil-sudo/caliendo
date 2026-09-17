@@ -14,5 +14,6 @@ artifacts/
 Thumbs.db
 public/images/
 public/videos/
+public/audio/
 public/favicon.png
 public/apple-touch-icon.png

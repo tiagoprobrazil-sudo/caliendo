@@ -3,9 +3,27 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Contact from '../components/Contact.astro';
 import { questions, site } from '../data/site';
 const pillars = [
-  { number: '01', name: 'Psicanálise', text: 'Um convite à palavra. Um espaço para falar sobre a sua história, suas inquietações e aquilo que pede escuta.' },
-  { number: '02', name: 'Filosofia', text: 'Um olhar para as perguntas. Refletir sobre as escolhas, os sentidos e as formas de estar no mundo.' },
-  { number: '03', name: 'Consciência', text: 'Uma abertura para olhar para si. Dar lugar à própria experiência, com atenção às singularidades do seu percurso.' },
+  {
+    number: '01',
+    name: 'Psicanálise',
+    text: 'Um convite à palavra. Um espaço para falar sobre a sua história, suas inquietações e aquilo que pede escuta.',
+    image: '/images/pillar-psicanalise.webp',
+    alt: 'Ilustração simbólica da mente com portas, espelhos e memórias, representando a psicanálise.',
+  },
+  {
+    number: '02',
+    name: 'Filosofia',
+    text: 'Um olhar para as perguntas. Refletir sobre as escolhas, os sentidos e as formas de estar no mundo.',
+    image: '/images/pillar-filosofia.webp',
+    alt: 'Busto clássico em mármore cercado de livros e formas geométricas, representando a filosofia.',
+  },
+  {
+    number: '03',
+    name: 'Consciência',
+    text: 'Uma abertura para olhar para si. Dar lugar à própria experiência, com atenção às singularidades do seu percurso.',
+    image: '/images/pillar-consciencia.webp',
+    alt: 'Figura em introspecção com luz interior e reflexo na água, representando a consciência.',
+  },
 ];
 ---
 <BaseLayout title="CALIENDO PSI | Eduardo Caliendo — Psicanalista e filósofo">
@@ -14,8 +32,8 @@ const pillars = [
       <video
         class="hero-video"
         poster="/images/hero-poster.jpg"
-        width="1600"
-        height="900"
+        width="1280"
+        height="720"
         muted
         loop
         playsinline
@@ -68,17 +86,90 @@ const pillars = [
   <section id="abordagem" class="approach section-space" aria-labelledby="approach-title">
     <div class="container">
       <div class="section-heading"><div><p class="eyebrow">TRÊS OLHARES, UM ENCONTRO</p><h2 id="approach-title">Escutar. Refletir.<br /><em>Conhecer-se.</em></h2></div><p>Não há uma história igual à outra.<br />Há caminhos que se constroem<br />a partir de uma escuta singular.</p></div>
-      <div class="pillars">{pillars.map((pillar) => <article class="pillar"><span class="pillar-number">{pillar.number}</span><h3>{pillar.name}</h3><p>{pillar.text}</p><span class="pillar-line" aria-hidden="true"></span></article>)}</div>
+      <div class="pillars">{pillars.map((pillar) => <article class="pillar"><img class="pillar-image" src={pillar.image} alt={pillar.alt} width="700" height="525" loading="lazy" decoding="async" /><div class="pillar-body"><span class="pillar-number">{pillar.number}</span><h3>{pillar.name}</h3><p>{pillar.text}</p><span class="pillar-line" aria-hidden="true"></span></div></article>)}</div>
     </div>
   </section>
 
-  <section class="reflection" aria-label="Um convite à reflexão"><div class="container"><span class="reflection-mark" aria-hidden="true">“</span><p>Você não precisa ter todas as respostas<br />para começar a se <em>escutar.</em></p><span class="reflection-footer">UM CONVITE AO SEU PRÓPRIO TEMPO</span></div></section>
+  <section class="reflection" aria-label="Um convite à reflexão">
+    <div class="reflection-media" aria-hidden="true">
+      <video class="reflection-video" poster="/images/reflection-poster.jpg" width="1280" height="720" muted loop playsinline preload="none">
+        <source src="/videos/reflection-neurons.mp4" type="video/mp4" />
+      </video>
+      <div class="reflection-overlay"></div>
+    </div>
+    <div class="container"><span class="reflection-mark" aria-hidden="true">“</span><p>Você não precisa ter todas as respostas<br />para começar a se <em>escutar.</em></p><span class="reflection-footer">UM CONVITE AO SEU PRÓPRIO TEMPO</span></div>
+  </section>
+  <script>
+    const reflectionSection = document.querySelector<HTMLElement>('.reflection');
+    const reflectionVideo = reflectionSection?.querySelector<HTMLVideoElement>('.reflection-video');
+    const prefersReducedMotionReflection = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (reflectionSection && reflectionVideo && !prefersReducedMotionReflection) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              reflectionVideo.play().catch(() => {});
+            } else {
+              reflectionVideo.pause();
+            }
+          }
+        },
+        { threshold: 0.25 },
+      );
+      observer.observe(reflectionSection);
+    }
+  </script>
 
   <section id="duvidas" class="faq section-space" aria-labelledby="faq-title">
     <div class="container faq-grid">
-      <div><p class="eyebrow">ANTES DE COMEÇAR</p><h2 id="faq-title">É natural<br />ter <em>perguntas.</em></h2><p>Algumas informações para<br />acolher o seu primeiro passo.</p><a class="text-link" href="#contato">Fale diretamente comigo <span aria-hidden="true">↗</span></a></div>
+      <div><p class="eyebrow">ANTES DE COMEÇAR</p><h2 id="faq-title">É natural<br />ter <em><span class="faq-word" aria-hidden="true">perguntas</span><span class="faq-cursor" aria-hidden="true"></span><span class="sr-only">perguntas</span>.</em></h2><p>Algumas informações para<br />acolher o seu primeiro passo.</p><a class="text-link" href="#contato">Fale diretamente comigo <span aria-hidden="true">↗</span></a></div>
       <div class="faq-list">{questions.map((item, index) => <details class="faq-item" name="perguntas"><summary><span class="faq-number">0{index + 1}</span><span>{item.question}</span><span class="faq-toggle" aria-hidden="true">+</span></summary><p>{item.answer}</p></details>)}</div>
     </div>
   </section>
+  <script>
+    const wordEl = document.querySelector<HTMLElement>('.faq-word');
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (wordEl && !prefersReducedMotion) {
+      const words = ['perguntas', 'dúvidas', 'inquietudes', 'questões', 'indagações', 'interrogações', 'reflexões'];
+      let current = wordEl.textContent ?? words[0];
+      let charIndex = current.length;
+      let deleting = true;
+
+      const pickNextWord = () => {
+        let next = current;
+        while (next === current) {
+          next = words[Math.floor(Math.random() * words.length)]!;
+        }
+        return next;
+      };
+
+      const tick = () => {
+        if (deleting) {
+          charIndex -= 1;
+          wordEl.textContent = current.slice(0, charIndex);
+          if (charIndex === 0) {
+            deleting = false;
+            current = pickNextWord();
+            setTimeout(tick, 300);
+            return;
+          }
+          setTimeout(tick, 45);
+        } else {
+          charIndex += 1;
+          wordEl.textContent = current.slice(0, charIndex);
+          if (charIndex === current.length) {
+            deleting = true;
+            setTimeout(tick, 1800);
+            return;
+          }
+          setTimeout(tick, 85);
+        }
+      };
+
+      setTimeout(tick, 1800);
+    }
+  </script>
   <Contact />
 </BaseLayout>

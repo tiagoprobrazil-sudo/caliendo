@@ -11,12 +11,30 @@ const execFileAsync = promisify(execFile);
 const root = fileURLToPath(new URL('..', import.meta.url));
 const imagesDir = path.join(root, 'public', 'images');
 const videosDir = path.join(root, 'public', 'videos');
+const audioDir = path.join(root, 'public', 'audio');
 const publicDir = path.join(root, 'public');
 
 const darkSource = path.join(root, '72fe7814-36c8-42b6-bcac-f1a21735fdfa.jpg');
 const lightSource = path.join(root, '27979788-6ae6-4b21-a1ba-9e3e6a277ea1.jpg');
 const cardSource = path.join(root, 'fd3b5963-4f21-4c26-8bdf-c0a37c183455.jpg');
-const heroVideoSource = path.join(root, '.img', 'Marble_face_loop_animation_1080p_20260916225641.mp4');
+const backgroundVideos = [
+  { source: path.join(root, '.img', 'Marble_sculpture_loop_animation_20260917161751.mp4'), videoName: 'hero-marble', posterName: 'hero-poster' },
+  { source: path.join(root, '.img', 'Electrical_impulses_firing_along…_20260917185151.mp4'), videoName: 'reflection-neurons', posterName: 'reflection-poster' },
+];
+// Ilustrações dos três pilares (Psicanálise, Filosofia, Consciência).
+const pillarImages = [
+  { source: path.join(root, '.img', 'c54f3a61-4dd0-4820-acad-516f48a35f59.png'), name: 'pillar-psicanalise' },
+  { source: path.join(root, '.img', 'be195a6b-a491-4692-b762-24e8d9060c7d.png'), name: 'pillar-filosofia' },
+  { source: path.join(root, '.img', 'b0bb365e-43f1-4eae-8fc8-0a6a17c49ce3.png'), name: 'pillar-consciencia' },
+];
+// Faixas da playlist ambiente do Hero. Os nomes de arquivo já usam os
+// títulos em português exibidos pelo player (ver AmbientPlayer.astro).
+const audioTracks = [
+  { source: path.join(root, '.img', 'Vinyl Crackles.mp3'), name: 'eco-do-tempo', channels: 1, bitrate: '64k' },
+  { source: path.join(root, '.img', 'Quiet Reflection.mp3'), name: 'espelho-interior', channels: 2, bitrate: '96k' },
+  { source: path.join(root, '.img', 'Quiet Contemplation.mp3'), name: 'instante-de-escuta', channels: 2, bitrate: '96k' },
+  { source: path.join(root, '.img', 'Quiet Contemplation (1).mp3'), name: 'silencio-necessario', channels: 2, bitrate: '96k' },
+];
 
 // Crop boxes were measured directly against the three reference JPGs
 // (pixel-scanned bounding box of the emblem against its card background,
@@ -27,6 +45,7 @@ const lightEmblemCrop = { left: 947, top: 170, width: 550, height: 550 };
 async function ensureDirs() {
   await mkdir(imagesDir, { recursive: true });
   await mkdir(videosDir, { recursive: true });
+  await mkdir(audioDir, { recursive: true });
 }
 
 async function emitEmblem(source, crop, name, widths) {
@@ -64,38 +83,51 @@ async function emitFavicons() {
     .toFile(path.join(publicDir, 'apple-touch-icon.png'));
 }
 
-async function emitHeroVideo() {
-  const output = path.join(videosDir, 'hero-marble.mp4');
-  // Sem áudio e recodificado a 1600px de largura: reduz o clipe de ~11.8MB
-  // (fonte 1080p) para ~1.7MB sem perda perceptível, já que ele fica atrás
-  // de um overlay escuro no Hero.
+async function emitBackgroundVideo({ source, videoName, posterName, maxWidth = 1600 }) {
+  // Sem áudio e recodificado (sem upscale além da largura nativa da fonte):
+  // reduz o peso do clipe sem perda perceptível, já que ele fica atrás de
+  // um overlay de texto.
   await execFileAsync(ffmpegPath, [
     '-y',
-    '-i', heroVideoSource,
+    '-i', source,
     '-an',
-    '-vf', 'scale=1600:-2',
+    '-vf', `scale='min(${maxWidth},iw)':-2`,
     '-c:v', 'libx264',
     '-preset', 'medium',
     '-crf', '28',
     '-pix_fmt', 'yuv420p',
     '-movflags', '+faststart',
-    output,
+    path.join(videosDir, `${videoName}.mp4`),
   ]);
 
+  const posterSource = path.join(imagesDir, `${posterName}-source.jpg`);
+  await execFileAsync(ffmpegPath, ['-y', '-i', source, '-vframes', '1', '-update', '1', posterSource]);
+
+  await sharp(posterSource)
+    .resize({ width: maxWidth })
+    .jpeg({ quality: 78 })
+    .toFile(path.join(imagesDir, `${posterName}.jpg`));
+  await unlink(posterSource);
+}
+
+async function emitPillarImage({ source, name }) {
+  // Proporção 4:3, igual à declarada em .pillar-image no CSS, para os
+  // atributos width/height do <img> baterem com o arquivo real.
+  await sharp(source)
+    .resize({ width: 700, height: 525, fit: 'cover', position: 'centre' })
+    .webp({ quality: 82 })
+    .toFile(path.join(imagesDir, `${name}.webp`));
+}
+
+async function emitAmbientTrack({ source, name, channels, bitrate }) {
   await execFileAsync(ffmpegPath, [
     '-y',
-    '-i', heroVideoSource,
-    '-vframes', '1',
-    '-update', '1',
-    path.join(imagesDir, 'hero-poster-source.jpg'),
+    '-i', source,
+    '-vn',
+    '-ac', String(channels),
+    '-b:a', bitrate,
+    path.join(audioDir, `${name}.mp3`),
   ]);
-
-  const posterSource = path.join(imagesDir, 'hero-poster-source.jpg');
-  await sharp(posterSource)
-    .resize({ width: 1600 })
-    .jpeg({ quality: 78 })
-    .toFile(path.join(imagesDir, 'hero-poster.jpg'));
-  await unlink(posterSource);
 }
 
 await ensureDirs();
@@ -104,7 +136,9 @@ await Promise.all([
   emitEmblem(lightSource, lightEmblemCrop, 'emblem-light', [400]),
   emitSocialCard(),
   emitFavicons(),
-  emitHeroVideo(),
+  ...backgroundVideos.map(emitBackgroundVideo),
+  ...pillarImages.map(emitPillarImage),
+  ...audioTracks.map(emitAmbientTrack),
 ]);
 
-console.log('Assets gerados em public/images, public/videos e public/.');
+console.log('Assets gerados em public/images, public/videos, public/audio e public/.');
