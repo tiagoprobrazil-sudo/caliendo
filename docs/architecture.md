@@ -50,6 +50,12 @@ Assets com hash podem receber cache longo e imutável; arquivos públicos com no
 
 Não foram adicionados React, gerenciador de estado, biblioteca de animação, formulários, analytics, Turnstile, KV, R2 ou D1. A arquitetura admite essas integrações quando houver um requisito concreto.
 
+## Vídeo do Hero
+
+Em 2026-09-17, um vídeo de referência (`.img/Marble_face_loop_animation_1080p_20260916225641.mp4`, 1080p, 10s, ~11,8MB) substituiu a imagem estática do emblema no Hero, dentro da mesma moldura circular dourada que já existia. `scripts/prepare-assets.mjs` usa `ffmpeg-static` para recodificar o clipe: remove o áudio (o vídeo é decorativo e sempre mudo), reduz a largura para 1600px e recomprime em H.264/CRF 28, chegando a ~1,7MB sem perda perceptível — o WebM/VP9 testado no mesmo ajuste ficou maior, então não foi adotado. O primeiro frame vira o pôster (`public/images/hero-poster.jpg`), exibido enquanto o vídeo carrega e usado como estado final para quem prefere menos movimento.
+
+O elemento `<video>` é `muted`, `loop`, `playsinline` e carrega sem o atributo `autoplay` no HTML; um script no fim da página confere `prefers-reduced-motion` no cliente antes de iniciar a reprodução, e só chama `.play()` quando o visitante não pediu movimento reduzido. Isso evita um `<video autoplay>` incondicional, que ignoraria essa preferência de acessibilidade. O vídeo é `aria-hidden`, já que é puramente decorativo — o conteúdo textual ao redor já comunica a mensagem do Hero.
+
 ## Segurança, acessibilidade e SEO
 
 Respostas SSR aplicam headers no middleware. `public/_headers` cobre assets estáticos e não deve ser considerado proteção das respostas geradas pelo Worker. CSP restringe recursos; sua validação inclui build e preview. Scripts, JSON-LD, fontes e estilos precisam respeitar a política efetivamente emitida. A [referência de CSP do Astro](https://docs.astro.build/en/reference/configuration-reference/#securitycsp) descreve a geração de hashes e as limitações no modo de desenvolvimento.

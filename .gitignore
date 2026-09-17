@@ -13,5 +13,6 @@ artifacts/
 .DS_Store
 Thumbs.db
 public/images/
+public/videos/
 public/favicon.png
 public/apple-touch-icon.png

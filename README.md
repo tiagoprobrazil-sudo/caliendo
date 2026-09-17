@@ -15,7 +15,7 @@ O projeto pode ser executado e validado localmente. A conexão com um repositór
 | Ferramentas Cloudflare | Wrangler 4.133.0 |
 | Linguagem e apresentação | TypeScript, HTML semântico e CSS |
 | Build e desenvolvimento | Node.js 24.12.0 e npm |
-| Imagens | Derivados locais preparados antes do build |
+| Imagens e vídeo | Derivados locais preparados antes do build (`sharp` e `ffmpeg-static`) |
 | Qualidade | Astro Check, ESLint e verificação HTTP de rotas |
 
 As versões efetivamente instaladas estão em `package-lock.json`. Use `npm ci` para reproduzi-las. O racional da arquitetura está em [docs/architecture.md](docs/architecture.md).
@@ -68,9 +68,11 @@ Resultados de Lighthouse dependem do dispositivo, rede e ambiente. Métricas de 
 ```text
 caliendo/
 ├── *.jpg                    # As cinco referências originais, preservadas
+├── .img/                    # Vídeo de referência do Hero (fonte bruta)
 ├── docs/                    # Decisões e documentação
 ├── public/                  # Arquivos servidos como assets estáticos
-│   └── images/              # Imagens derivadas para o site
+│   ├── images/              # Imagens derivadas para o site
+│   └── videos/              # Vídeo do Hero recodificado
 ├── scripts/                 # Preparação, smoke test e proteção de deploy
 ├── src/
 │   ├── components/          # Elementos compartilhados
@@ -94,7 +96,7 @@ caliendo/
 
 ## Referências e conteúdo
 
-Os cinco JPGs da raiz são originais de referência e não devem ser apagados. Há três imagens distintas e duas cópias duplicadas. `scripts/prepare-assets.mjs` produz os arquivos utilizados pelo site; alterações nos derivados devem ser reproduzíveis pelo script.
+Os cinco JPGs da raiz são originais de referência e não devem ser apagados. Há três imagens distintas e duas cópias duplicadas. `.img/Marble_face_loop_animation_1080p_20260916225641.mp4` é a fonte do vídeo em loop do Hero. `scripts/prepare-assets.mjs` produz os arquivos utilizados pelo site (imagens em `public/images/`, vídeo recodificado em `public/videos/`); alterações nos derivados devem ser reproduzíveis pelo script. A recodificação do vídeo usa `ffmpeg-static` (binário do FFmpeg instalado via npm, sem dependência do sistema), remove o áudio e reduz a resolução para 1600px de largura, cortando o peso de ~11,8MB para ~1,7MB sem perda perceptível. O vídeo só é reproduzido automaticamente quando o visitante não pede `prefers-reduced-motion: reduce`; caso contrário, permanece parado no pôster (`public/images/hero-poster.jpg`).
 
 Identidade visual, retrato, composição e texto identificável nas referências orientam a implementação. O conteúdo identifica **Eduardo Caliendo — Psicanalista / Filósofo**. Os contatos fornecidos são WhatsApp **+55 21 99864-6217**, e-mail **eduvelloso@gmail.com** e Instagram **@holisticamente**. Não há formulário de coleta de dados, ferramenta de analytics ou sessão de usuário.
 

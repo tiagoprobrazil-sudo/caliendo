@@ -19,15 +19,34 @@ const pillars = [
         <span class="hero-note">O primeiro passo pode ser uma conversa.</span>
       </div>
       <div class="hero-symbol">
-        <picture>
-          <source type="image/avif" srcset="/images/emblem-dark-640.avif" />
-          <img src="/images/emblem-dark-640.webp" srcset="/images/emblem-dark-320.webp 320w, /images/emblem-dark-640.webp 640w" sizes="(max-width: 760px) 280px, 42vw" width="640" height="640" alt="Emblema original de Eduardo Caliendo: símbolo psi, asas e estrela em dourado." fetchpriority="high" decoding="async" />
-        </picture>
+        <div class="hero-video-frame">
+          <video
+            class="hero-video"
+            poster="/images/hero-poster.jpg"
+            width="640"
+            height="640"
+            muted
+            loop
+            playsinline
+            preload="auto"
+            aria-hidden="true"
+          >
+            <source src="/videos/hero-marble.mp4" type="video/mp4" />
+          </video>
+        </div>
         <span class="symbol-caption">ESCUTA · REFLEXÃO · AUTOCONHECIMENTO</span>
       </div>
     </div>
     <div class="container hero-bottom"><span>PSICANALISTA & FILÓSOFO</span><a href="#sobre">Conheça este espaço <span aria-hidden="true">↓</span></a><span>RIO DE JANEIRO · RJ</span></div>
   </section>
+  <script>
+    const heroVideo = document.querySelector<HTMLVideoElement>('.hero-video');
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (heroVideo && !prefersReducedMotion) {
+      heroVideo.autoplay = true;
+      heroVideo.play().catch(() => {});
+    }
+  </script>
 
   <section id="sobre" class="about section-space" aria-labelledby="about-title">
     <div class="container about-grid">

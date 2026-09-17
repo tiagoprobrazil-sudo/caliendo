@@ -60,6 +60,17 @@ const checks = [
       assert(res.status === 200, `status esperado 200, recebido ${res.status}`);
     },
   },
+  {
+    name: 'GET /videos/hero-marble.mp4 retorna 200',
+    run: async () => {
+      const res = await fetch(baseUrl + '/videos/hero-marble.mp4');
+      assert(res.status === 200, `status esperado 200, recebido ${res.status}`);
+      assert(
+        (res.headers.get('content-type') ?? '').includes('video/mp4'),
+        'content-type inesperado para o vídeo do hero',
+      );
+    },
+  },
 ];
 
 function assert(condition, message) {
