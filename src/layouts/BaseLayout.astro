@@ -10,6 +10,7 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import AmbientPlayer from '../components/AmbientPlayer.astro';
+import WhatsappButton from '../components/WhatsappButton.astro';
 import { site } from '../data/site';
 
 interface Props { title: string; description?: string; noindex?: boolean; }
@@ -62,6 +63,9 @@ Astro.csp?.insertScriptHash(`sha256-${hash}`);
     <Header />
     <main id="conteudo"><slot /></main>
     <Footer />
-    <AmbientPlayer />
+    <div class="floating-actions">
+      <WhatsappButton />
+      <AmbientPlayer />
+    </div>
   </body>
 </html>
